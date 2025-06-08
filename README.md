@@ -47,20 +47,21 @@ More technical based features:
 - Note which OS is being used: I.e. Windows vs Unix-based system
 
 Once downloading the source code, there are only a few things left to configure before everything can be fired up: 
-1. Download the source code to your machine. `git clone <PROJECT_URL>`.
-2. Take the `config.template.toml` file in the `project_root/backend` directory and rename it to `config.toml`. Ensure this is the only file of this name in the directory.
-3. Fill in the placeholder values in the file: `<PATH_TO_LOCAL_DATA_DIRECTORY>`, `<DB_USER>`, and `<DB_PASSWORD>`.
+1. Create the database directory in the project root: `<PROJECT_ROOT>/database`
+2. Download the source code to your machine. `git clone <PROJECT_URL>`.
+3. Take the `config.template.toml` file in the `project_root/backend` directory and rename it to `config.toml`. Ensure this is the only file of this name in the directory.
+4. Fill in the placeholder values in the file: `<PATH_TO_LOCAL_DATA_DIRECTORY>`, `<DB_USER>`, and `<DB_PASSWORD>`.
     - It should be noted that if the base OS is windows then in the `docker` section of the `config.toml` file, the  `HOST_DIRECTORY` field must be filed in using the Windows Filesystem Path, otherwise some files won't be able to be found when running scripts and logging their outputs.
-    - Also the database username and password is hardcoded in the `compose.yml` file and thus, if you want to use your own, the values need to be changed there as well. (`MYSQL_USER` & `MYSQL_PASSWORD`)
-4. Your data directory should be located inside the backend directory as `./backend/data/`; however if desired, this directory can be placed anywhere but must be reflected in both the `config.toml` and `compose.yaml` files. 
-5. The data directory must follow the following structure: (The content of each directory: `scripts` and `images` will be created dynamically.)
+    - Also, the database username and password is hardcoded in the `compose.yml` file and thus, if you want to use your own, the values need to be changed there as well. (`MYSQL_USER` & `MYSQL_PASSWORD`)
+5. Your data directory should be located inside the backend directory as `./backend/data/`; however if desired, this directory can be placed anywhere but must be reflected in both the `config.toml` and `compose.yaml` files. 
+6. The data directory must follow the following structure: (The content of each directory: `scripts` and `images` will be created dynamically.)
    ```text
     data
       │--- images
       └─── scripts
    ```
-6. Configure SSL/TLS in NGINX by navigating inside the `./nginx` directory and generating a Key and Certificate using the command: `openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./certs/key.pem -out ./certs/cert.pem`.
-7. Start the application: `docker compose up -d` 
+7. Configure SSL/TLS in NGINX by navigating inside the `./nginx` directory and generating a Key and Certificate using the command: `openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./certs/key.pem -out ./certs/cert.pem`.
+8. Start the application: `docker compose up -d` 
 
 ## Future Work
 - Script Versioning
