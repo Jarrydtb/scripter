@@ -1,0 +1,10 @@
+.DS_Store
+./database/mysql/
+./backend/.idea/
+./backend/.venv/
+./backend/data/images/
+./backend/data/scripts/
+./backend/docker-scripts-test-data/
+./backend/conf.toml
+
+
