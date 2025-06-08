@@ -47,7 +47,7 @@ More technical based features:
 - Note which OS is being used: I.e. Windows vs Unix-based system
 
 Once downloading the source code, there are only a few things left to configure before everything can be fired up: 
-1. Create the database directory in the project root: `<PROJECT_ROOT>/database`
+1. Create the database directory in the project root: `<PROJECT_ROOT>/database`.
 2. Download the source code to your machine. `git clone <PROJECT_URL>`.
 3. Take the `config.template.toml` file in the `project_root/backend` directory and rename it to `config.toml`. Ensure this is the only file of this name in the directory.
 4. Fill in the placeholder values in the file: `<PATH_TO_LOCAL_DATA_DIRECTORY>`, `<DB_USER>`, and `<DB_PASSWORD>`.
