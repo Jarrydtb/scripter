@@ -1,0 +1,88 @@
+name: scripter
+
+x-backend_common: &backend_common
+  build: backend
+  depends_on:
+    rabbitmq:
+      condition: service_healthy
+    database:
+      condition: service_healthy
+  environment:
+    - APP_ENV=docker
+    - HOST_OS=windows
+  volumes:
+    - ./backend/data:/app/data
+    - ./backend/conf.toml:/app/conf.toml
+    - //var/run/docker.sock:/var/run/docker.sock
+
+services:
+
+  # Backend apps
+  app:
+    <<: *backend_common
+    hostname: app
+    container_name: app
+    ports: ["8000:8000"]
+    command: python -u entrypoint.py
+
+  worker:
+    <<: *backend_common
+    container_name: worker
+    command: dramatiq -v entrypoint
+
+  periodiq:
+    <<: *backend_common
+    container_name: periodiq
+    command: python -m periodiq entrypoint
+
+  # Message Broker
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:4.0-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  database:
+    container_name: database
+    image: mysql:9.2.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=strong_password
+      - MYSQL_DATABASE=script_runner
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=user_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./database/mysql/conf:/etc/mysql/conf.d
+      - ./database/mysql/data:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -h localhost --user=$MYSQL_USER --password=$MYSQL_PASSWORD
+      interval: "30s"
+      timeout: "30s"
+      retries: 3
+
+  frontend:
+    build: ./frontend
+    container_name: frontend_app
+    environment:
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+    expose:
+      - "3000"
+    depends_on:
+      - app
+
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app
+      - frontend

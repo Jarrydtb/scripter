@@ -1,0 +1,13 @@
+[local]
+SQLALCHEMY_ECHO=true
+DATA_DIRECTORY="<PATH_TO_LOCAL_DATA_DIRECTORY>"
+DATABASE_CONN_URL="mysql+mysqlconnector://<DB_USERNAME>:<DB_PASSSWORD>@localhost:3307/script_runner"
+BROKER_URL="localhost"
+
+
+[docker]
+SQLALCHEMY_ECHO=false
+DATA_DIRECTORY="/app/data"
+HOST_DATA_DIRECTORY="<PATH_TO_LOCAL_DATA_DIRECTORY>"
+DATABASE_CONN_URL="mysql+mysqlconnector://<DB_USERNAME>:<DB_PASSSWORD>@database:3306/script_runner"
+BROKER_URL="rabbitmq"
